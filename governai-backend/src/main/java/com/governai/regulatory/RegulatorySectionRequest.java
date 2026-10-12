@@ -1,0 +1,1 @@
+package com.governai.regulatory; import jakarta.validation.constraints.*; import tools.jackson.databind.JsonNode; import java.util.UUID; public record RegulatorySectionRequest(@NotNull UUID regulatoryDocumentId,@Size(max=50) String sectionNumber,@Size(max=255) String heading,@NotBlank String content,JsonNode metadata){}

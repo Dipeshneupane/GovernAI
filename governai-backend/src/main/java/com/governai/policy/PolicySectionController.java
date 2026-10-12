@@ -41,4 +41,18 @@ public class PolicySectionController {
         return policySectionService
                 .getSectionsByDocument(policyDocumentId);
     }
+
+    @PutMapping("/{id}")
+    public PolicySectionResponse updatePolicySection(
+            @PathVariable UUID id,
+            @Valid @RequestBody PolicySectionRequest request
+    ) {
+        return policySectionService.updatePolicySection(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePolicySection(@PathVariable UUID id) {
+        policySectionService.deletePolicySection(id);
+    }
 }

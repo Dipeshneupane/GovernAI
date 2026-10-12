@@ -1,0 +1,1 @@
+package com.governai.decision; public enum EvidenceSource { INTERNAL_POLICY, REGULATION, REGULATORY_GUIDANCE, PREVIOUS_DECISION, ARCHITECTURE_DECISION }

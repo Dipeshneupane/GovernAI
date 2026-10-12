@@ -1,0 +1,1 @@
+package com.governai.decision; public enum DecisionStatus { DRAFT, ANALYZING, PENDING_REVIEW, APPROVED, CONDITIONALLY_APPROVED, REJECTED, ESCALATED, CLOSED }

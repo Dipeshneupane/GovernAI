@@ -1,0 +1,1 @@
+package com.governai.decision;import jakarta.validation.constraints.*;import java.util.UUID;public record ApprovalPayload(@NotNull UUID reviewerId,@NotNull ApprovalAction action,String originalRecommendation,String finalDecision,String reviewerComment){}

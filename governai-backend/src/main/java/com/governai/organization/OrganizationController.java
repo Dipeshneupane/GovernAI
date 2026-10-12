@@ -38,4 +38,18 @@ public class OrganizationController {
     public List<OrganizationResponse> getAllOrganizations() {
         return organizationService.getAllOrganizations();
     }
+
+    @PutMapping("/{id}")
+    public OrganizationResponse updateOrganization(
+            @PathVariable UUID id,
+            @Valid @RequestBody OrganizationRequest request
+    ) {
+        return organizationService.updateOrganization(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOrganization(@PathVariable UUID id) {
+        organizationService.deleteOrganization(id);
+    }
 }

@@ -9,4 +9,6 @@ public interface PolicySectionRepository
         extends JpaRepository<PolicySection, UUID> {
 
     List<PolicySection> findByPolicyDocument_Id(UUID policyDocumentId);
+
+    List<PolicySection> findByPolicyDocument_Organization_Id(UUID organizationId);
 }

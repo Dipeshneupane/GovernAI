@@ -41,4 +41,18 @@ public class PolicyDocumentController {
         return policyDocumentService
                 .getByOrganization(organizationId);
     }
+
+    @PutMapping("/{id}")
+    public PolicyDocumentResponse updatePolicyDocument(
+            @PathVariable UUID id,
+            @Valid @RequestBody PolicyDocumentRequest request
+    ) {
+        return policyDocumentService.updatePolicyDocument(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePolicyDocument(@PathVariable UUID id) {
+        policyDocumentService.deletePolicyDocument(id);
+    }
 }

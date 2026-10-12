@@ -1,0 +1,1 @@
+package com.governai.decision; import org.springframework.data.jpa.repository.JpaRepository; import java.util.*; public interface DecisionRequestRepository extends JpaRepository<DecisionRequest,UUID>{List<DecisionRequest> findByOrganizationIdOrderByCreatedAtDesc(UUID organizationId);List<DecisionRequest> findByStatusOrderByCreatedAtDesc(DecisionStatus status);}

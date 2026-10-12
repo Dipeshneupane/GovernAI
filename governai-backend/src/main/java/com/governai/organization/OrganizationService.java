@@ -51,4 +51,30 @@ public class OrganizationService {
                 .map(OrganizationResponse::fromEntity)
                 .toList();
     }
+
+    public OrganizationResponse updateOrganization(
+            UUID id,
+            OrganizationRequest request
+    ) {
+        Organization organization = organizationRepository.findById(id)
+                .orElseThrow(() -> new OrganizationNotFoundException(id));
+        applyRequest(organization, request);
+        return OrganizationResponse.fromEntity(organizationRepository.save(organization));
+    }
+
+    public void deleteOrganization(UUID id) {
+        Organization organization = organizationRepository.findById(id)
+                .orElseThrow(() -> new OrganizationNotFoundException(id));
+        organizationRepository.delete(organization);
+    }
+
+    private void applyRequest(Organization organization, OrganizationRequest request) {
+        organization.setName(request.name());
+        organization.setCountryCode(request.countryCode());
+        organization.setIndustry(request.industry());
+        organization.setOrganizationSize(request.organizationSize());
+        organization.setDataSensitivity(request.dataSensitivity());
+        organization.setOperatingRegions(request.operatingRegions());
+        organization.setRegulatoryContext(request.regulatoryContext());
+    }
 }

@@ -1,5 +1,7 @@
 package com.governai.policy;
 
+import com.governai.exception.PolicyDocumentNotFoundException;
+import com.governai.exception.PolicySectionNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,42 +31,52 @@ public class PolicySectionService {
                 policyDocumentRepository
                         .findById(request.policyDocumentId())
                         .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Policy document not found with id: "
-                                                + request.policyDocumentId()
+                                new PolicyDocumentNotFoundException(
+                                        request.policyDocumentId()
                                 )
                         );
 
-        PolicySection section = new PolicySection();
+        PolicySection policySection = new PolicySection();
 
-        section.setPolicyDocument(policyDocument);
-        section.setSectionNumber(request.sectionNumber());
-        section.setHeading(request.heading());
-        section.setContent(request.content());
-        section.setRuleType(request.ruleType());
-        section.setRiskLevel(request.riskLevel());
-        section.setApprovalRequired(request.approvalRequired());
-        section.setApprovalRole(request.approvalRole());
-        section.setMetadata(request.metadata());
+        policySection.setPolicyDocument(policyDocument);
+        policySection.setSectionNumber(request.sectionNumber());
+        policySection.setHeading(request.heading());
+        policySection.setContent(request.content());
+        policySection.setRuleType(request.ruleType());
+        policySection.setRiskLevel(request.riskLevel());
+        policySection.setApprovalRequired(
+                request.approvalRequired()
+        );
+        policySection.setApprovalRole(
+                request.approvalRole()
+        );
+        policySection.setMetadata(
+                request.metadata()
+        );
 
-        PolicySection saved =
-                policySectionRepository.save(section);
+        PolicySection savedPolicySection =
+                policySectionRepository.save(policySection);
 
-        return PolicySectionResponse.fromEntity(saved);
+        return PolicySectionResponse.fromEntity(
+                savedPolicySection
+        );
     }
 
     @Transactional(readOnly = true)
-    public PolicySectionResponse getPolicySectionById(UUID id) {
+    public PolicySectionResponse getPolicySectionById(
+            UUID id
+    ) {
 
-        PolicySection section =
-                policySectionRepository.findById(id)
+        PolicySection policySection =
+                policySectionRepository
+                        .findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Policy section not found with id: " + id
-                                )
+                                new PolicySectionNotFoundException(id)
                         );
 
-        return PolicySectionResponse.fromEntity(section);
+        return PolicySectionResponse.fromEntity(
+                policySection
+        );
     }
 
     @Transactional(readOnly = true)
@@ -73,9 +85,8 @@ public class PolicySectionService {
     ) {
 
         if (!policyDocumentRepository.existsById(policyDocumentId)) {
-            throw new RuntimeException(
-                    "Policy document not found with id: "
-                            + policyDocumentId
+            throw new PolicyDocumentNotFoundException(
+                    policyDocumentId
             );
         }
 
@@ -84,5 +95,33 @@ public class PolicySectionService {
                 .stream()
                 .map(PolicySectionResponse::fromEntity)
                 .toList();
+    }
+
+    @Transactional
+    public PolicySectionResponse updatePolicySection(
+            UUID id,
+            PolicySectionRequest request
+    ) {
+        PolicySection section = policySectionRepository.findById(id)
+                .orElseThrow(() -> new PolicySectionNotFoundException(id));
+        PolicyDocument document = policyDocumentRepository.findById(request.policyDocumentId())
+                .orElseThrow(() -> new PolicyDocumentNotFoundException(request.policyDocumentId()));
+        section.setPolicyDocument(document);
+        section.setSectionNumber(request.sectionNumber());
+        section.setHeading(request.heading());
+        section.setContent(request.content());
+        section.setRuleType(request.ruleType());
+        section.setRiskLevel(request.riskLevel());
+        section.setApprovalRequired(request.approvalRequired());
+        section.setApprovalRole(request.approvalRole());
+        section.setMetadata(request.metadata());
+        return PolicySectionResponse.fromEntity(policySectionRepository.save(section));
+    }
+
+    @Transactional
+    public void deletePolicySection(UUID id) {
+        PolicySection section = policySectionRepository.findById(id)
+                .orElseThrow(() -> new PolicySectionNotFoundException(id));
+        policySectionRepository.delete(section);
     }
 }

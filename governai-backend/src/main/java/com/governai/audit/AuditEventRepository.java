@@ -1,0 +1,1 @@
+package com.governai.audit;import org.springframework.data.jpa.repository.JpaRepository;import java.util.*;public interface AuditEventRepository extends JpaRepository<AuditEvent,UUID>{List<AuditEvent> findByDecisionRequestIdOrderByCreatedAtAsc(UUID decisionRequestId);List<AuditEvent> findByOrganizationIdOrderByCreatedAtDesc(UUID organizationId);}
